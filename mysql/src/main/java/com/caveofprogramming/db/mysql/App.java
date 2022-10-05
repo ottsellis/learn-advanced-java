@@ -1,8 +1,6 @@
 package com.caveofprogramming.db.mysql;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  *
