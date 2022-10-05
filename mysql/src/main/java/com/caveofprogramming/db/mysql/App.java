@@ -10,17 +10,7 @@ import java.util.Properties;
  */
 public class App {
 	public static void main(String[] args) {
-
-		Properties props = new Properties();
-		
-		String propertiesFile = "/config/db.properties";
-
-		try {
-			props.load(App.class.getResourceAsStream(propertiesFile));
-		} catch (IOException e1) {
-			System.out.println("Cannot load properties file: " + propertiesFile);
-			return;
-		}
+		var props = Profile.getProperties("db");
 
 		var db = Database.instance();
 
