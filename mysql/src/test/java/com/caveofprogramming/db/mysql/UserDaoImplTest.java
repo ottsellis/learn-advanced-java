@@ -78,7 +78,7 @@ public class UserDaoImplTest {
 		
 		List<User> retrieved = new ArrayList<User>();
 		
-		var stmt = conn.prepareStatement("SELECT id, name FROM user WHERE minId >= ? and maxId <= ?");
+		var stmt = conn.prepareStatement("SELECT id, name FROM user WHERE id >= ? and id <= ?");
 		
 		stmt.setInt(1, minId);
 		stmt.setInt(2, maxId);
@@ -109,7 +109,17 @@ public class UserDaoImplTest {
 		
 		var maxId = getMaxId();
 		
-		System.out.println(maxId);
+		for(int i = 0; i < users.size(); i++) {
+			int id = (maxId - users.size()) + i + 1;
+			
+			users.get(i).setId(id);
+		}
+		
+		var retrievedUsers = getUsersInRange((maxId - users.size()) + 1, maxId);
+		
+		assertEquals("size of returned users not equal to number of test users",retrievedUsers.size(), NUM_TEST_USERS);
+		
+		assertEquals("retrieved users don't match saved users", users, retrievedUsers);
 	}
 
 	@Test
