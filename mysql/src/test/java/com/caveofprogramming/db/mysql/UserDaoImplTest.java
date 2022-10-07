@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,6 +72,31 @@ public class UserDaoImplTest {
 		stmt.close();
 		
 		return id;
+	}
+	
+	private List<User> getUsersInRange(int minId, int maxId) throws SQLException{
+		
+		List<User> retrieved = new ArrayList<User>();
+		
+		var stmt = conn.prepareStatement("SELECT id, name FROM user WHERE minId >= ? and maxId <= ?");
+		
+		stmt.setInt(1, minId);
+		stmt.setInt(2, maxId);
+		
+		var rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			String name = rs.getString("name");
+			
+			var user = new User(id, name);
+			
+			retrieved.add(user);
+		}
+		
+		stmt.close();
+		
+		return retrieved;
 	}
 	
 	@Test
