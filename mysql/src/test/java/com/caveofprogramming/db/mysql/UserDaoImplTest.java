@@ -100,6 +100,41 @@ public class UserDaoImplTest {
 	}
 	
 	@Test
+	public void testDelete() throws SQLException {
+		UserDao userDao = new UserDaoImpl();
+		
+		for(var u: users) {
+			userDao.save(u);
+		}
+		
+		var maxId = getMaxId();
+		
+		for(int i = 0; i < users.size(); i++) {
+			int id = (maxId - users.size()) + i + 1;
+			
+			users.get(i).setId(id);
+		}
+		
+		var deleteUserIndex = NUM_TEST_USERS/2;
+		var deleteUser = users.get(deleteUserIndex);
+		
+		System.out.println(deleteUser);
+		System.out.println(users);
+		
+		users.remove(deleteUser);
+		
+		userDao.delete(deleteUser);
+		
+		var retrievedUsers = getUsersInRange((maxId - NUM_TEST_USERS) + 1, maxId);
+		
+		System.out.println(retrievedUsers);
+		
+		assertEquals("size of returned users not equal to number of test users",retrievedUsers.size(), users.size());
+		
+		assertEquals("retrieved users don't match saved users", users, retrievedUsers);
+	}
+	
+	@Test
 	public void testGetAll() throws SQLException {
 		UserDao userDao = new UserDaoImpl();
 		
