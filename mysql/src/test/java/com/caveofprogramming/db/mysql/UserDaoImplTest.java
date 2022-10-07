@@ -57,6 +57,34 @@ public class UserDaoImplTest {
 	public void tearDown() throws SQLException {
 		Database.instance().close();
 	}
+	
+	private int getMaxId() throws SQLException {
+		
+		var stmt = conn.createStatement();
+		
+		var rs = stmt.executeQuery("SELECT MAX(id) AS id FROM user");
+		
+		rs.next();
+		
+		var id = rs.getInt("id");
+	
+		stmt.close();
+		
+		return id;
+	}
+	
+	@Test
+	public void testSaveMultiple() throws SQLException {
+		UserDao userDao = new UserDaoImpl();
+		
+		for(var u: users) {
+			userDao.save(u);
+		}
+		
+		var maxId = getMaxId();
+		
+		System.out.println(maxId);
+	}
 
 	@Test
 	public void testSave() throws SQLException {
